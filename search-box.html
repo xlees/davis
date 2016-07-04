@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>search box demo</title>
+
+	<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <!-- jquery ui -->
+    <!-- <script src="jquery-ui-1.11.2/jquery-ui.min.js"></script>
+    <link href="jquery-ui-1.11.2/jquery-ui.min.css" rel="stylesheet">
+    <link href="css/jquery-ui-timepicker-addon.css" rel="stylesheet"> -->
+
+    <!-- bootstrap -->
+    <!-- <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script> -->
+    <!-- <link href="bootstrap-3.3.4/css/bootstrap.min.css"> -->
+
+    <style type="text/css">
+        /*div {
+            margin: 0 auto;
+        }*/
+    	.search-form {
+			/*background-color: lightgrey;*/
+            margin: 0 auto;
+            position: relative;
+    	}
+    	.search-form input[type='text'] {
+            /*background: transparent;*/
+            width: 400px;
+            /*height: 40px;*/
+            outline: none;
+    		padding: 5px;
+            border: 1px solid #D9D9D9;
+            /*border-width: 1px;
+            border-style: solid;
+            border-color: red;*/ /*#a8acbc #babdcc #c0c3d2;*/
+    		/*background-color: grey;*/
+    	}
+
+    	.search-form input[type='text']:focus {
+            border-color: #4D90FE;
+    	}
+
+    	.search-form input[type='text']:hover:not(:focus) {
+    		/*outline: none;*/
+            /*outline-width: 1px;*/
+    		border-color: #A1A1A1;
+    		/*border-width: 0;*/
+    		/*outline: 1px solid grey;*/
+    		/*box-shadow: 0px 0px 5px #61C5FA;*/
+    	}
+
+    	.search-form input[type='hidden'] {
+    		border: 0px solid red;
+    		/*background-color: grey;*/
+    	}
+
+        .search-form input[type='submit'] {
+            border-radius: 0px;
+            padding: 5px 30px;
+            /*border: 0px solid red;*/
+            /*background-color: grey;*/
+        }
+        #suggestion {
+            opacity: .85;
+            padding: 15px 8px;
+            background-color: white;
+            position: absolute;
+            display: none;
+            outline: none;
+            /*width: 350px;*/
+            /*height: 80px;*/
+            box-shadow: 1px 1px 1px;
+            border: 1px solid lightgrey;
+            z-index: 23;
+        }
+        #suggestion ul {
+            list-style-type: none;
+            /*background-color: lightblue;*/
+            margin: 0;
+            padding: 0;
+        }
+        #suggestion li+li {
+            border-top: 1px solid lightgrey;
+            padding: 8px 3px;
+        }
+        #suggestion li:hover {
+           background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+	<div style="margin: 0 auto; background-color: transparent;">
+		<form id="frm-search" class="search-form" action="">
+			<input id="input-content" type="text" name="" placeholder="输入关键词进行搜索...">
+            <div id="suggestion"></div>
+			<!-- <input type="hidden" name=""> -->
+			<!-- <input type="hidden" name="h2"> -->
+			<input type="submit" name="" value="Search">
+		</form>
+	</div>
+    <div id="content">
+        <p>this is a paragraph.</p>
+    </div>
+
+    <script type="text/javascript">
+        $('#input-content').focusout(function () {
+            $('#suggestion').empty().css('display','none');
+        });
+
+        $('.search-form input[type="text"]')
+            .keyup(function (e) {
+                clearTimeout($(this).data('timer'));
+                // console.log(e);
+
+                if (e.keyCode == 13)
+                    action();
+                else
+                    $(this).data('timer', setTimeout(action, 500));
+            });
+
+        function action() {
+            var text = $('#input-content').val().trim();
+            // $('#content').text(text);
+            var suggest = $('<div></div>');
+            suggest.css({
+                'width': '200px',
+                'height': '80px',
+                'border': '1px solid lightgrey',
+                'outline': 'none',
+                'box-shadow': '1px 1px 1px',
+                'z-index': '20',
+                'float': 'left'
+            });
+
+            var width = $('#input-content').innerWidth();
+            var height = $('#input-content').outerHeight();
+            var pos = $('#input-content').position();
+            console.log("width=",width,height,pos);
+
+            var topJson = [
+                'BMW',
+                'LEXUS',
+                'BENZ'
+            ];
+            var html = "<ul><li>bmw</li><li>lexus</li><li>benz</li><li>"+text+"</li></ul>";
+
+            // suggest.text(text);
+            // $('.search-form input[type="text"]').after(suggest);
+            $('#suggestion').html(html);
+            $('#suggestion').css({
+                'display': 'block',
+                'left': pos.left+'px',
+                'width': width+'px',
+                'top': (pos.top+height)+'px'
+            });
+        }
+      
+    </script>
+</body>
+</html>
